@@ -18,7 +18,7 @@ interface Row {
   note: string;
 }
 
-const EMPTY_ROW: Row = { distance: "", time: "", stability: "", wind: "0", note: "" };
+const EMPTY_ROW: Row = { distance: "", time: "", stability: "", wind: "", note: "" };
 const INPUT = "w-full rounded-md border border-line bg-white px-2 py-2 text-sm focus:border-grass focus:outline-none";
 
 function optionalNumber(text: string): number | null {
@@ -116,7 +116,8 @@ export function RecordFlights({ onSubmit }: { onSubmit: (flights: FlightInput[])
             </label>
             <label className="text-xs text-muted">
               Wind
-              <select className={`${INPUT} mt-1`} value={row.wind} onChange={(e) => update(i, { wind: e.target.value })}>
+              <select aria-label={`Flight ${i + 1} wind`} className={`${INPUT} mt-1`} value={row.wind} onChange={(e) => update(i, { wind: e.target.value })}>
+                <option value="">—</option>
                 {WIND.map((w, n) => (
                   <option key={w} value={n}>
                     {w}

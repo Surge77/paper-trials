@@ -4,13 +4,13 @@ import { describe, expect, it, vi } from "vitest";
 
 import { RecordFlights, STEP_LENGTH_M, toFlights } from "../src/components/record-flights";
 
-const row = (distance: string, note = "") => ({ distance, time: "", stability: "", wind: "0", note });
+const row = (distance: string, note = "") => ({ distance, time: "", stability: "", wind: "", note });
 
 describe("toFlights", () => {
   it("skips empty rows and keeps the rest", () => {
     expect(toFlights([row("12.4"), row(""), row("13", " stalled ")], "m")).toEqual([
-      { distance_m: 12.4, time_s: null, stability: null, wind: 0, note: null },
-      { distance_m: 13, time_s: null, stability: null, wind: 0, note: "stalled" },
+      { distance_m: 12.4, time_s: null, stability: null, wind: null, note: null },
+      { distance_m: 13, time_s: null, stability: null, wind: null, note: "stalled" },
     ]);
   });
 
@@ -29,6 +29,19 @@ describe("toFlights", () => {
 });
 
 describe("RecordFlights", () => {
+  it("leaves wind unrecorded unless you pick one", async () => {
+    const onSubmit = vi.fn().mockResolvedValue(undefined);
+    render(<RecordFlights onSubmit={onSubmit} />);
+    await userEvent.type(screen.getByLabelText("Flight 1 distance"), "9");
+    await userEvent.selectOptions(screen.getByLabelText("Flight 2 wind"), "breezy");
+    await userEvent.type(screen.getByLabelText("Flight 2 distance"), "8");
+    await userEvent.click(screen.getByRole("button", { name: "Save flights" }));
+    expect(onSubmit).toHaveBeenCalledWith([
+      expect.objectContaining({ distance_m: 9, wind: null }),
+      expect.objectContaining({ distance_m: 8, wind: 2 }),
+    ]);
+  });
+
   it("submits typed flights", async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
     render(<RecordFlights onSubmit={onSubmit} />);
@@ -36,7 +49,7 @@ describe("RecordFlights", () => {
     await userEvent.type(screen.getByLabelText("Flight 1 note"), "veered left");
     await userEvent.click(screen.getByRole("button", { name: "Save flights" }));
     expect(onSubmit).toHaveBeenCalledWith([
-      { distance_m: 14.8, time_s: null, stability: null, wind: 0, note: "veered left" },
+      { distance_m: 14.8, time_s: null, stability: null, wind: null, note: "veered left" },
     ]);
   });
 

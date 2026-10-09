@@ -60,9 +60,9 @@ export const api = {
   deleteExperiment: (id: number) => request<void>(`/experiments/${id}`, { method: "DELETE" }),
   addFlights: (id: number, flights: FlightInput[]) =>
     sendJson<Experiment>("POST", `/experiments/${id}/flights`, { flights }),
-  checkPhoto: (id: number, photo: File) => {
+  checkPhoto: (id: number, photo: Blob) => {
     const form = new FormData();
-    form.append("photo", photo);
+    form.append("photo", photo, "plane.jpg");
     return request<Experiment>(`/experiments/${id}/photo`, { method: "POST", body: form });
   },
   loadDemo: () => request<{ loaded: number }>("/demo", { method: "POST" }),

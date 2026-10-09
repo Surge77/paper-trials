@@ -105,7 +105,7 @@ the real median landed inside its range, and lets you plot every throw against o
 
 ## Running it
 
-You need Python 3.11+ with [uv](https://docs.astral.sh/uv/), and Node.js 22 or newer. Ollama is optional.
+You need Python 3.11+ with [uv](https://docs.astral.sh/uv/), and Node.js 22.12 or newer. Ollama is optional.
 
 ```
 git clone https://github.com/Surge77/paper-trials.git
@@ -186,7 +186,9 @@ Run the backend with reload while working on it: `uv run uvicorn papertrials.mai
 
 Every design variable is defined once in [`fields.py`](backend/src/papertrials/fields.py). The database
 columns, the model features, the form in the browser and the steps the recommender can take all come from
-that list, so adding a variable means adding one entry there and one column in `models.py`.
+that list, so adding a variable means adding one entry there and one column in `models.py`. There are
+no migrations, so an existing `papertrials.db` won't get the new column; delete it or add the column by
+hand.
 
 ## Credits
 

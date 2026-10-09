@@ -54,7 +54,8 @@ export function PlanPage({ pick, copy, onDataChange }: { pick: number | null; co
   const [starting] = useResource(() => loadStarting(fields, pick, copy), [pick, copy]);
   if (starting.status === "loading") return <Loading />;
   if (starting.status === "error") return <Notice tone="error">{starting.message}</Notice>;
-  return <PlanForm starting={starting.data} onDataChange={onDataChange} />;
+  // Keyed so editing the URL from one suggestion to another resets the form.
+  return <PlanForm key={`${pick}-${copy}`} starting={starting.data} onDataChange={onDataChange} />;
 }
 
 function PlanForm({ starting, onDataChange }: { starting: Starting; onDataChange: () => void }) {

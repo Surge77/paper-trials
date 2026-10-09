@@ -45,9 +45,11 @@ function TestMode({ experiment, onUpdated, onDeleted }: {
   onDeleted: () => void;
 }) {
   const [error, setError] = useState<string | null>(null);
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
   async function record(flights: FlightInput[]) {
     onUpdated(await api.addFlights(experiment.id, flights));
+    window.scrollTo(0, 0);
   }
 
   async function remove() {
@@ -98,9 +100,19 @@ function TestMode({ experiment, onUpdated, onDeleted }: {
         <RecordFlights onSubmit={record} />
       </Card>
       {error && <Notice tone="error">{error}</Notice>}
-      <Button kind="danger" onClick={remove}>
-        Delete this plan
-      </Button>
+      {isConfirmingDelete ? (
+        <div className="flex flex-wrap items-center gap-3 text-sm">
+          <span>Delete plane #{experiment.number} and its saved prediction?</span>
+          <Button kind="danger" onClick={remove}>
+            Yes, delete it
+          </Button>
+          <Button onClick={() => setIsConfirmingDelete(false)}>Keep it</Button>
+        </div>
+      ) : (
+        <Button kind="danger" onClick={() => setIsConfirmingDelete(true)}>
+          Delete this plan
+        </Button>
+      )}
     </div>
   );
 }
@@ -116,7 +128,6 @@ export function ExperimentPage({ id, onDataChange }: { id: number; onDataChange:
   const onUpdated = (e: Experiment) => {
     setUpdated(e);
     onDataChange();
-    window.scrollTo(0, 0);
   };
   const onDeleted = () => {
     onDataChange();

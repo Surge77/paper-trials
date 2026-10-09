@@ -4,6 +4,26 @@ import { api, errorMessage } from "../api";
 import type { Experiment } from "../types";
 
 const MAX_PHOTO_MB = 8;
+// Plenty for Gemma to judge symmetry, and keeps a phone camera photo well under the upload limit.
+const PHOTO_MAX_SIDE_PX = 1024;
+const PHOTO_QUALITY = 0.85;
+
+/** Shrinks a photo in the browser before upload. Returns the original if the browser can't decode it. */
+async function shrinkPhoto(file: File): Promise<Blob> {
+  try {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, PHOTO_MAX_SIDE_PX / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    canvas.getContext("2d")?.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close();
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", PHOTO_QUALITY));
+    return blob ?? file;
+  } catch {
+    return file;
+  }
+}
 
 /** Optional: Gemma looks at a photo of the plane. Shown as an estimate, never used by the model. */
 export function PhotoCheck({ experiment, onChecked }: { experiment: Experiment; onChecked: (e: Experiment) => void }) {
@@ -13,14 +33,15 @@ export function PhotoCheck({ experiment, onChecked }: { experiment: Experiment; 
 
   async function upload(file: File | undefined) {
     if (!file) return;
-    if (file.size > MAX_PHOTO_MB * 1024 * 1024) {
-      setError(`That photo is over ${MAX_PHOTO_MB} MB.`);
-      return;
-    }
     setIsChecking(true);
     setError(null);
     try {
-      onChecked(await api.checkPhoto(experiment.id, file));
+      const photo = await shrinkPhoto(file);
+      if (photo.size > MAX_PHOTO_MB * 1024 * 1024) {
+        setError(`That photo is over ${MAX_PHOTO_MB} MB.`);
+        return;
+      }
+      onChecked(await api.checkPhoto(experiment.id, photo));
     } catch (e) {
       setError(errorMessage(e));
     } finally {
