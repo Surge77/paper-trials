@@ -1,3 +1,4 @@
+import asyncio
 import json
 
 import pytest
@@ -140,3 +141,13 @@ async def test_photo_check_is_marked_as_an_estimate_and_clamped(monkeypatch: pyt
     assert result["estimate"] is True
     assert result["confidence"] == 1.0
     assert result["symmetry"] == "uneven"
+
+
+async def test_slow_gemma_note_falls_back_to_keywords(monkeypatch: pytest.MonkeyPatch) -> None:
+    async def slow_chat(prompt: str, schema: object = None, image: object = None) -> str:
+        await asyncio.sleep(1)
+        return json.dumps({"issues": []})
+
+    monkeypatch.setattr(gemma, "_chat", slow_chat)
+    monkeypatch.setattr(gemma, "NOTE_TIMEOUT_S", 0.05)
+    assert await gemma.parse_note("it stalled") == (["stall"], "keywords")

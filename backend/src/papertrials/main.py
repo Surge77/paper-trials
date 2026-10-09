@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -26,7 +26,12 @@ def create_app() -> FastAPI:
 
         @app.get("/{path:path}", include_in_schema=False)
         async def spa(path: str) -> FileResponse:
-            candidate = (FRONTEND_DIST / path).resolve()
+            if path.startswith("api/"):
+                raise HTTPException(status_code=404, detail="Not found")
+            try:
+                candidate = (FRONTEND_DIST / path).resolve()
+            except (OSError, ValueError):  # e.g. a null byte in the path
+                candidate = FRONTEND_DIST / "index.html"
             if path and candidate.is_file() and candidate.is_relative_to(FRONTEND_DIST):
                 return FileResponse(candidate)
             return FileResponse(FRONTEND_DIST / "index.html")

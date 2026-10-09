@@ -1,5 +1,6 @@
 """The experiment lifecycle: plan -> predict (frozen) -> fly -> log -> lab note."""
 
+import asyncio
 import statistics
 from collections.abc import Sequence
 from typing import Any
@@ -87,7 +88,8 @@ def create_experiment(session: Session, payload: ExperimentCreate) -> Experiment
 
 def lab_note_facts(exp: Experiment, parent: Experiment | None) -> dict[str, Any]:
     distances = [f.distance_m for f in exp.flights]
-    median = round(statistics.median(distances), 1)
+    exact_median = statistics.median(distances)
+    median = round(exact_median, 1)
     issues = sorted({i for f in exp.flights for i in (f.issues or [])})
     facts: dict[str, Any] = {
         "number": exp.number,
@@ -104,15 +106,15 @@ def lab_note_facts(exp: Experiment, parent: Experiment | None) -> dict[str, Any]
     if exp.pred_low is not None and exp.pred_high is not None:
         facts["predicted_low"] = round(exp.pred_low, 1)
         facts["predicted_high"] = round(exp.pred_high, 1)
-        facts["inside_prediction"] = exp.pred_low <= median <= exp.pred_high
+        facts["inside_prediction"] = exp.pred_low <= exact_median <= exp.pred_high
     return facts
 
 
 async def record_flights(session: Session, exp: Experiment, flights: Sequence[FlightIn]) -> Experiment:
     if exp.id is None:
         raise ValueError("experiment must be saved before logging flights")
-    for flight_in in flights:
-        issues, source = await gemma.parse_note(flight_in.note)
+    parsed = await asyncio.gather(*(gemma.parse_note(f.note) for f in flights))
+    for flight_in, (issues, source) in zip(flights, parsed, strict=True):
         session.add(Flight(experiment_id=exp.id, issues=issues, issues_source=source, **flight_in.model_dump()))
     exp.status = "flown"
     session.commit()

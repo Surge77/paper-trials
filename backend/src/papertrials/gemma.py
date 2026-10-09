@@ -12,6 +12,7 @@ Ollama isn't running:
    shape. This is shown as an estimate and never fed to the model.
 """
 
+import asyncio
 import base64
 import json
 import logging
@@ -23,6 +24,9 @@ import httpx
 from papertrials.config import get_settings
 
 log = logging.getLogger(__name__)
+
+# Notes are parsed while you wait for the save, so a slow model falls back to keywords quickly.
+NOTE_TIMEOUT_S = 15.0
 
 ISSUES = ("stall", "nose_dive", "spiral", "veer_left", "veer_right", "flutter", "tumble")
 
@@ -106,10 +110,10 @@ async def parse_note(note: str | None) -> tuple[list[str], str | None]:
         f"Note: {note.strip()[:500]}"
     )
     try:
-        data = json.loads(await _chat(prompt, _NOTE_SCHEMA))
+        data = json.loads(await asyncio.wait_for(_chat(prompt, _NOTE_SCHEMA), NOTE_TIMEOUT_S))
         issues = [i for i in dict.fromkeys(data.get("issues", [])) if i in ISSUES]
         return issues, "gemma"
-    except (httpx.HTTPError, ValueError, KeyError, TypeError) as exc:
+    except (httpx.HTTPError, ValueError, KeyError, TypeError, TimeoutError) as exc:
         log.info("Gemma note parsing unavailable, using keywords: %s", exc)
         return issues_from_keywords(note), "keywords"
 

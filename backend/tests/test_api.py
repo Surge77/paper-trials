@@ -109,3 +109,13 @@ def test_hypothesis_reads_naturally_for_plural_labels(client: TestClient) -> Non
         **STARTER_DESIGN, "winglet_mm": 5, "parent_id": first["id"], "changed_field": "winglet_mm",
     }).json()
     assert planned["hypothesis"].startswith("Changing winglets from 0 mm to 5 mm should move the median distance from 10.5 m")
+
+
+def test_wind_cannot_be_the_changed_design_field(client: TestClient) -> None:
+    parent = _fly(client, STARTER_DESIGN)
+    response = client.post("/api/experiments", json={**STARTER_DESIGN, "parent_id": parent["id"], "changed_field": "wind"})
+    assert response.status_code == 422
+
+
+def test_unknown_api_path_is_a_404_not_the_web_page(client: TestClient) -> None:
+    assert client.get("/api/nope").status_code == 404
