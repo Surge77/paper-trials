@@ -1,15 +1,17 @@
-import { useCallback } from "react";
+import { lazy, Suspense, useCallback } from "react";
 
 import { api } from "./api";
 import { StatusBar } from "./components/status-bar";
 import { Loading, Notice } from "./components/ui";
 import { FieldsContext } from "./fields-context";
 import { ExperimentPage } from "./pages/experiment";
-import { LabPage } from "./pages/lab";
 import { NotebookPage } from "./pages/notebook";
 import { PlanPage } from "./pages/plan";
 import { type Route, useRoute } from "./router";
 import { useResource } from "./use-resource";
+
+// Charts are most of the bundle, so the lab loads them only when opened.
+const LabPage = lazy(() => import("./pages/lab").then((m) => ({ default: m.LabPage })));
 
 function NavLink({ href, isActive, children }: { href: string; isActive: boolean; children: string }) {
   return (
@@ -26,7 +28,11 @@ function NavLink({ href, isActive, children }: { href: string; isActive: boolean
 function Page({ route, onDataChange }: { route: Route; onDataChange: () => void }) {
   switch (route.page) {
     case "lab":
-      return <LabPage onDataChange={onDataChange} />;
+      return (
+        <Suspense fallback={<Loading />}>
+          <LabPage onDataChange={onDataChange} />
+        </Suspense>
+      );
     case "plan":
       return <PlanPage pick={route.pick} copy={route.copy} onDataChange={onDataChange} />;
     case "experiment":
