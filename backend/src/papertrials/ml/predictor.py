@@ -105,8 +105,12 @@ class TabPFNPredictor:
 
     def __init__(self, data: TrainingSet) -> None:
         from tabpfn import TabPFNRegressor
+        from tabpfn.constants import ModelVersion
 
-        self._model = TabPFNRegressor(
+        # v2 weights download without an account. Newer versions need a browser
+        # licence login first, which a local app shouldn't spring on people.
+        self._model = TabPFNRegressor.create_default_for_version(
+            ModelVersion.V2,
             n_estimators=4,
             categorical_features_indices=list(CATEGORICAL_INDICES),
             random_state=0,

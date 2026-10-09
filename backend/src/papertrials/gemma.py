@@ -30,8 +30,8 @@ _KEYWORDS: dict[str, tuple[str, ...]] = {
     "stall": ("stall", "stalled", "climbed then dropped", "nose up", "swoop"),
     "nose_dive": ("nose dive", "nosedive", "dived", "dove", "crashed straight", "nose down", "dropped like"),
     "spiral": ("spiral", "spun", "corkscrew", "circled"),
-    "veer_left": ("veered left", "went left", "pulled left", "banked left", "curved left"),
-    "veer_right": ("veered right", "went right", "pulled right", "banked right", "curved right"),
+    "veer_left": ("veered left", "went left", "pulled left", "banked left", "curved left", "drifted left"),
+    "veer_right": ("veered right", "went right", "pulled right", "banked right", "curved right", "drifted right"),
     "flutter": ("flutter", "wobbl", "shook", "shaky"),
     "tumble": ("tumble", "flipped", "somersault", "rolled over"),
 }
@@ -141,6 +141,28 @@ _PROBLEM_WORDS = ("issue", "problem", "recurring", "stall", "dive", "spiral", "v
 _OUTSIDE_WORDS = ("outside", "exceed", "beyond", "above the", "below the", "short of", "missed")
 _INSIDE_WORDS = ("inside", "within", "matched", "as predicted")
 _FACT_LINE = re.compile(r"^[A-Z][\w' ]{2,60}: ")
+# Matches "the median distance increased", "distance dropped to" and so on. Only the
+# distance is checked, because "the wing span was reduced" is about the change itself.
+_DISTANCE_UP = re.compile(r"\b(?:distance|median)\b[^.]{0,30}?\b(?:increased|rose|improved|went up|grew)\b", re.I)
+_DISTANCE_DOWN = re.compile(r"\b(?:distance|median)\b[^.]{0,30}?\b(?:decreased|dropped|fell|went down|declined)\b", re.I)
+
+
+# Three flights can't show why something happened, so cause words get a note rejected.
+# "resulting in a median distance of" is fine; "resulting in a stall" is a guess.
+_CAUSE = re.compile(
+    r"\b(?:caus\w*|because|due to|led to|leading to)\b"
+    r"|\bresult(?:ing|ed)? in an? (?:stall|nose|spiral|veer|flutter|tumble)"
+    r"|\b(?:stall|dive|spiral|veer|flutter|tumble)\w*\b[^.]{0,40}\bresult",
+    re.I,
+)
+
+
+def _wrong_direction(text: str, facts: dict[str, Any]) -> bool:
+    before = facts.get("parent_median_m")
+    if before is None or before == facts["median_m"]:
+        return False
+    wrong = _DISTANCE_DOWN if facts["median_m"] > before else _DISTANCE_UP
+    return wrong.search(text) is not None
 
 
 def _clean_reply(text: str) -> str:
@@ -203,6 +225,7 @@ async def write_lab_note(facts: dict[str, Any]) -> tuple[str, str]:
     if facts.get("predicted_low") is not None:
         wrong_words = _OUTSIDE_WORDS if facts.get("inside_prediction") else _INSIDE_WORDS
         contradicts = any(w in lower for w in wrong_words)
+    contradicts = contradicts or _wrong_direction(text, facts) or _CAUSE.search(text) is not None
     if not text or len(text) > 400 or invents_problem or contradicts or not numbers_are_grounded(text, facts):
         log.info("Rejected Gemma lab note: %r", text)
         return template_lab_note(facts), "template"
