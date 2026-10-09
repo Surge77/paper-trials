@@ -101,3 +101,11 @@ def test_photo_check_rejects_non_images(client: TestClient) -> None:
 def test_fields_endpoint_lists_every_field(client: TestClient) -> None:
     names = [f["name"] for f in client.get("/api/fields").json()]
     assert "wing_span_cm" in names and "wind" in names
+
+
+def test_hypothesis_reads_naturally_for_plural_labels(client: TestClient) -> None:
+    first = _fly(client, STARTER_DESIGN)
+    planned = client.post("/api/experiments", json={
+        **STARTER_DESIGN, "winglet_mm": 5, "parent_id": first["id"], "changed_field": "winglet_mm",
+    }).json()
+    assert planned["hypothesis"].startswith("Changing winglets from 0 mm to 5 mm should move the median distance from 10.5 m")

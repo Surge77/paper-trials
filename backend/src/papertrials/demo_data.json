@@ -19,7 +19,7 @@
   "nose_angle_deg": 35.0,
   "id": 1,
   "changed_to": null,
-  "lab_note": "The plane consistently achieved a median distance of 9.8 m across three flights with no changes from the previous design.  A stall and veer left were observed during the flight notes.",
+  "lab_note": "The median distance of 9.8 m was achieved across three flights of the starting plane, and a stall was observed. There was no change from the previous plane, and the flight exhibited a veer left.",
   "winglet_mm": 0.0,
   "number": 1,
   "pred_low": null,
@@ -34,8 +34,8 @@
     "issues": [
      "veer_left"
     ],
-    "id": 1,
     "distance_m": 9.8,
+    "id": 1,
     "stability": 2,
     "note": "drifted left a bit",
     "issues_source": "gemma"
@@ -47,8 +47,8 @@
     "issues": [
      "stall"
     ],
-    "id": 2,
     "distance_m": 9.5,
+    "id": 2,
     "stability": 3,
     "note": "stalled halfway",
     "issues_source": "gemma"
@@ -60,8 +60,8 @@
     "issues": [
      "stall"
     ],
-    "id": 3,
     "distance_m": 11.1,
+    "id": 3,
     "stability": 1,
     "note": "good one",
     "issues_source": "gemma"
@@ -82,7 +82,7 @@
   "pred_rows": 3,
   "launch_angle": 0.0,
   "changed_field": "wing_span_cm",
-  "hypothesis": "If wing span goes from 18 cm to 17 cm, the median distance should move from 9.8 m to about 9.8 m (likely 8.3–11.3 m).",
+  "hypothesis": "Changing wing span from 18 cm to 17 cm should move the median distance from 9.8 m to about 9.8 m (likely 8.3–11.3 m).",
   "launch_force": 2.0,
   "changed_from": 18.0,
   "nose_angle_deg": 35.0,
@@ -103,8 +103,8 @@
     "issues": [
      "stall"
     ],
-    "id": 4,
     "distance_m": 9.5,
+    "id": 4,
     "stability": 2,
     "note": "went up, stalled and dropped",
     "issues_source": "gemma"
@@ -116,8 +116,8 @@
     "issues": [
      "stall"
     ],
-    "id": 5,
     "distance_m": 7.9,
+    "id": 5,
     "stability": 2,
     "note": "stalled halfway",
     "issues_source": "gemma"
@@ -127,8 +127,8 @@
     "time_s": 1.8,
     "wind": 0.0,
     "issues": [],
-    "id": 6,
     "distance_m": 9.3,
+    "id": 6,
     "stability": 3,
     "note": null,
     "issues_source": null
@@ -149,7 +149,7 @@
   "pred_rows": 6,
   "launch_angle": 0.0,
   "changed_field": "nose_angle_deg",
-  "hypothesis": "If nose angle goes from 35 ° to 30 °, the median distance should move from 9.8 m to about 9.5 m (likely 8.1–10.9 m).",
+  "hypothesis": "Changing nose angle from 35° to 30° should move the median distance from 9.8 m to about 9.5 m (likely 8.1–10.9 m).",
   "launch_force": 2.0,
   "changed_from": 35.0,
   "nose_angle_deg": 30.0,
@@ -168,8 +168,8 @@
     "time_s": 2.0,
     "wind": 1.0,
     "issues": [],
-    "id": 7,
     "distance_m": 11.6,
+    "id": 7,
     "stability": 3,
     "note": null,
     "issues_source": null
@@ -181,8 +181,8 @@
     "issues": [
      "stall"
     ],
-    "id": 8,
     "distance_m": 10.6,
+    "id": 8,
     "stability": 4,
     "note": "climbed then stalled",
     "issues_source": "gemma"
@@ -194,8 +194,8 @@
     "issues": [
      "stall"
     ],
-    "id": 9,
     "distance_m": 10.3,
+    "id": 9,
     "stability": 2,
     "note": "went up, stalled and dropped",
     "issues_source": "gemma"
@@ -216,7 +216,7 @@
   "pred_rows": 9,
   "launch_angle": 0.0,
   "changed_field": "elevator_bend",
-  "hypothesis": "If tail bend goes from none to slight, the median distance should move from 10.6 m to about 9.5 m (likely 7.3–11.8 m).",
+  "hypothesis": "Changing tail bend from none to slight should move the median distance from 10.6 m to about 9.5 m (likely 7.3–11.8 m).",
   "launch_force": 2.0,
   "changed_from": 0.0,
   "nose_angle_deg": 30.0,
@@ -235,8 +235,8 @@
     "time_s": 1.9,
     "wind": 0.0,
     "issues": [],
-    "id": 10,
     "distance_m": 12.5,
+    "id": 10,
     "stability": 2,
     "note": null,
     "issues_source": null
@@ -246,8 +246,8 @@
     "time_s": 1.9,
     "wind": 1.0,
     "issues": [],
-    "id": 11,
     "distance_m": 12.1,
+    "id": 11,
     "stability": 3,
     "note": null,
     "issues_source": null
@@ -257,8 +257,8 @@
     "time_s": 2.4,
     "wind": 0.0,
     "issues": [],
-    "id": 12,
     "distance_m": 14.1,
+    "id": 12,
     "stability": 3,
     "note": null,
     "issues_source": null
@@ -279,7 +279,7 @@
   "pred_rows": 12,
   "launch_angle": 0.0,
   "changed_field": "wing_span_cm",
-  "hypothesis": "If wing span goes from 18 cm to 19 cm, the median distance should move from 12.5 m to about 12.7 m (likely 10.2–15.2 m).",
+  "hypothesis": "Changing wing span from 18 cm to 19 cm should move the median distance from 12.5 m to about 12.7 m (likely 10.2–15.2 m).",
   "launch_force": 2.0,
   "changed_from": 18.0,
   "nose_angle_deg": 30.0,
@@ -298,8 +298,8 @@
     "time_s": 2.5,
     "wind": 0.0,
     "issues": [],
-    "id": 13,
     "distance_m": 13.6,
+    "id": 13,
     "stability": 4,
     "note": null,
     "issues_source": null
@@ -311,8 +311,8 @@
     "issues": [
      "veer_left"
     ],
-    "id": 14,
     "distance_m": 14.5,
+    "id": 14,
     "stability": 2,
     "note": "drifted left a bit",
     "issues_source": "gemma"
@@ -322,8 +322,8 @@
     "time_s": 2.1,
     "wind": 0.0,
     "issues": [],
-    "id": 15,
     "distance_m": 11.8,
+    "id": 15,
     "stability": 3,
     "note": null,
     "issues_source": null
@@ -344,7 +344,7 @@
   "pred_rows": 15,
   "launch_angle": 0.0,
   "changed_field": "elevator_bend",
-  "hypothesis": "If tail bend goes from slight to strong, the median distance should move from 13.6 m to about 13.8 m (likely 12.1–15.6 m).",
+  "hypothesis": "Changing tail bend from slight to strong should move the median distance from 13.6 m to about 13.8 m (likely 12.1–15.6 m).",
   "launch_force": 2.0,
   "changed_from": 1.0,
   "nose_angle_deg": 30.0,
@@ -363,8 +363,8 @@
     "time_s": 2.1,
     "wind": 0.0,
     "issues": [],
-    "id": 16,
     "distance_m": 12.0,
+    "id": 16,
     "stability": 3,
     "note": null,
     "issues_source": null
@@ -376,8 +376,8 @@
     "issues": [
      "veer_right"
     ],
-    "id": 17,
     "distance_m": 11.8,
+    "id": 17,
     "stability": 2,
     "note": "pulled right at the end",
     "issues_source": "gemma"
@@ -389,8 +389,8 @@
     "issues": [
      "stall"
     ],
-    "id": 18,
     "distance_m": 10.8,
+    "id": 18,
     "stability": 3,
     "note": "swooped up and stalled",
     "issues_source": "gemma"
@@ -411,7 +411,7 @@
   "pred_rows": 18,
   "launch_angle": 0.0,
   "changed_field": "wing_span_cm",
-  "hypothesis": "If wing span goes from 19 cm to 20 cm, the median distance should move from 13.6 m to about 13.0 m (likely 11.0–14.9 m).",
+  "hypothesis": "Changing wing span from 19 cm to 20 cm should move the median distance from 13.6 m to about 13.0 m (likely 11.0–14.9 m).",
   "launch_force": 2.0,
   "changed_from": 19.0,
   "nose_angle_deg": 30.0,
@@ -430,8 +430,8 @@
     "time_s": 2.2,
     "wind": 0.0,
     "issues": [],
-    "id": 19,
     "distance_m": 12.7,
+    "id": 19,
     "stability": 4,
     "note": null,
     "issues_source": null
@@ -441,8 +441,8 @@
     "time_s": 2.7,
     "wind": 0.0,
     "issues": [],
-    "id": 20,
     "distance_m": 15.6,
+    "id": 20,
     "stability": 3,
     "note": null,
     "issues_source": null
@@ -452,8 +452,8 @@
     "time_s": 2.2,
     "wind": 0.0,
     "issues": [],
-    "id": 21,
     "distance_m": 14.3,
+    "id": 21,
     "stability": 2,
     "note": null,
     "issues_source": null
@@ -474,7 +474,7 @@
   "pred_rows": 21,
   "launch_angle": 0.0,
   "changed_field": "wing_span_cm",
-  "hypothesis": "If wing span goes from 20 cm to 21 cm, the median distance should move from 14.3 m to about 14.3 m (likely 12.3–16.5 m).",
+  "hypothesis": "Changing wing span from 20 cm to 21 cm should move the median distance from 14.3 m to about 14.3 m (likely 12.3–16.5 m).",
   "launch_force": 2.0,
   "changed_from": 20.0,
   "nose_angle_deg": 30.0,
@@ -493,8 +493,8 @@
     "time_s": 2.1,
     "wind": 2.0,
     "issues": [],
-    "id": 22,
     "distance_m": 12.9,
+    "id": 22,
     "stability": 1,
     "note": null,
     "issues_source": null
@@ -504,8 +504,8 @@
     "time_s": 2.9,
     "wind": 0.0,
     "issues": [],
-    "id": 23,
     "distance_m": 14.5,
+    "id": 23,
     "stability": 5,
     "note": null,
     "issues_source": null
@@ -515,8 +515,8 @@
     "time_s": 2.4,
     "wind": 0.0,
     "issues": [],
-    "id": 24,
     "distance_m": 14.1,
+    "id": 24,
     "stability": 3,
     "note": null,
     "issues_source": null
@@ -537,7 +537,7 @@
   "pred_rows": 24,
   "launch_angle": 0.0,
   "changed_field": "nose_angle_deg",
-  "hypothesis": "If nose angle goes from 30 ° to 25 °, the median distance should move from 14.3 m to about 13.7 m (likely 12.2–15.5 m).",
+  "hypothesis": "Changing nose angle from 30° to 25° should move the median distance from 14.3 m to about 13.7 m (likely 12.2–15.5 m).",
   "launch_force": 2.0,
   "changed_from": 30.0,
   "nose_angle_deg": 25.0,
@@ -556,8 +556,8 @@
     "time_s": 2.7,
     "wind": 0.0,
     "issues": [],
-    "id": 25,
     "distance_m": 14.2,
+    "id": 25,
     "stability": 3,
     "note": null,
     "issues_source": null
@@ -567,8 +567,8 @@
     "time_s": 2.0,
     "wind": 1.0,
     "issues": [],
-    "id": 26,
     "distance_m": 13.0,
+    "id": 26,
     "stability": 3,
     "note": null,
     "issues_source": null
@@ -580,8 +580,8 @@
     "issues": [
      "stall"
     ],
-    "id": 27,
     "distance_m": 14.7,
+    "id": 27,
     "stability": 2,
     "note": "nice and flat",
     "issues_source": "gemma"
@@ -602,7 +602,7 @@
   "pred_rows": 27,
   "launch_angle": 0.0,
   "changed_field": "body_length_cm",
-  "hypothesis": "If body length goes from 21 cm to 20 cm, the median distance should move from 14.3 m to about 13.6 m (likely 12.3–15.0 m).",
+  "hypothesis": "Changing body length from 21 cm to 20 cm should move the median distance from 14.3 m to about 13.6 m (likely 12.3–15.0 m).",
   "launch_force": 2.0,
   "changed_from": 21.0,
   "nose_angle_deg": 30.0,
@@ -623,8 +623,8 @@
     "issues": [
      "veer_left"
     ],
-    "id": 28,
     "distance_m": 13.7,
+    "id": 28,
     "stability": 4,
     "note": "drifted left a bit",
     "issues_source": "gemma"
@@ -634,8 +634,8 @@
     "time_s": 2.2,
     "wind": 2.0,
     "issues": [],
-    "id": 29,
     "distance_m": 13.0,
+    "id": 29,
     "stability": 4,
     "note": null,
     "issues_source": null
@@ -645,8 +645,8 @@
     "time_s": 2.4,
     "wind": 0.0,
     "issues": [],
-    "id": 30,
     "distance_m": 15.0,
+    "id": 30,
     "stability": 2,
     "note": null,
     "issues_source": null
@@ -667,13 +667,13 @@
   "pred_rows": 30,
   "launch_angle": 0.0,
   "changed_field": "body_length_cm",
-  "hypothesis": "If body length goes from 21 cm to 22 cm, the median distance should move from 14.3 m to about 13.8 m (likely 12.2–15.4 m).",
+  "hypothesis": "Changing body length from 21 cm to 22 cm should move the median distance from 14.3 m to about 13.8 m (likely 12.2–15.4 m).",
   "launch_force": 2.0,
   "changed_from": 21.0,
   "nose_angle_deg": 30.0,
   "id": 11,
   "changed_to": 22.0,
-  "lab_note": "The median distance decreased from 14.3 m to 14.0 m after increasing the body length from 21 cm to 22 cm. A stall was observed during the flights.",
+  "lab_note": "The median distance of 14.0 m was achieved after increasing the body length from 21 cm to 22 cm. The previous plane’s median distance of 14.3 m was reduced.",
   "winglet_mm": 0.0,
   "number": 11,
   "pred_low": 12.202564919362619,
@@ -686,8 +686,8 @@
     "time_s": 2.6,
     "wind": 0.0,
     "issues": [],
-    "id": 31,
     "distance_m": 14.2,
+    "id": 31,
     "stability": 1,
     "note": "smooth glide",
     "issues_source": "gemma"
@@ -696,11 +696,9 @@
     "created_at": "2026-10-07T12:32:00",
     "time_s": 2.4,
     "wind": 1.0,
-    "issues": [
-     "stall"
-    ],
-    "id": 32,
+    "issues": [],
     "distance_m": 14.0,
+    "id": 32,
     "stability": 2,
     "note": "nice and flat",
     "issues_source": "gemma"
@@ -710,8 +708,8 @@
     "time_s": 2.5,
     "wind": 1.0,
     "issues": [],
-    "id": 33,
     "distance_m": 13.6,
+    "id": 33,
     "stability": 2,
     "note": null,
     "issues_source": null
@@ -732,7 +730,7 @@
   "pred_rows": 33,
   "launch_angle": 0.0,
   "changed_field": "winglet_mm",
-  "hypothesis": "If winglets goes from 0 mm to 5 mm, the median distance should move from 14.3 m to about 13.8 m (likely 12.6–15.0 m).",
+  "hypothesis": "Changing winglets from 0 mm to 5 mm should move the median distance from 14.3 m to about 13.8 m (likely 12.6–15.0 m).",
   "launch_force": 2.0,
   "changed_from": 0.0,
   "nose_angle_deg": 30.0,
@@ -751,8 +749,8 @@
     "time_s": 2.8,
     "wind": 0.0,
     "issues": [],
-    "id": 34,
     "distance_m": 15.1,
+    "id": 34,
     "stability": 2,
     "note": null,
     "issues_source": null
@@ -764,8 +762,8 @@
     "issues": [
      "veer_right"
     ],
-    "id": 35,
     "distance_m": 13.4,
+    "id": 35,
     "stability": 3,
     "note": "pulled right at the end",
     "issues_source": "gemma"
@@ -775,8 +773,8 @@
     "time_s": 2.8,
     "wind": 1.0,
     "issues": [],
-    "id": 36,
     "distance_m": 15.3,
+    "id": 36,
     "stability": 2,
     "note": "smooth glide",
     "issues_source": "gemma"

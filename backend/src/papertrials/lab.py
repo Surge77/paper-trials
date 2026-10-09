@@ -53,8 +53,8 @@ def _hypothesis(exp: Experiment, parent: Experiment | None, band: Band | None) -
         return f"Expected distance: {expected}."
     spec = FIELDS_BY_NAME[exp.changed_field]
     return (
-        f"If {spec.label.lower()} goes from {spec.format(exp.changed_from)} to {spec.format(exp.changed_to)}, "
-        f"the median distance should move from {median_distance(parent):.1f} m to {expected}."
+        f"Changing {spec.label.lower()} from {spec.format(exp.changed_from)} to {spec.format(exp.changed_to)} "
+        f"should move the median distance from {median_distance(parent):.1f} m to {expected}."
     )
 
 
