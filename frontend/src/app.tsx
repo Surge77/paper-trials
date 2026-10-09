@@ -76,6 +76,9 @@ export function App() {
           </FieldsContext.Provider>
         )}
       </main>
+      <footer className="mx-auto max-w-5xl px-4 pb-8 text-xs text-muted">
+        Built with PriorLabs-TabPFN. Notes and photo checks by Gemma, running on your own computer.
+      </footer>
     </div>
   );
 }
