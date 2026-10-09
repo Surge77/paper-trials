@@ -1,0 +1,42 @@
+[project]
+name = "papertrials"
+version = "0.1.0"
+description = "Paper Trials backend: experiment log, TabPFN predictions and Gemma notes for paper airplanes."
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi==0.118.0",
+    "uvicorn[standard]==0.37.0",
+    "sqlmodel==0.0.25",
+    "httpx==0.28.1",
+    "pydantic-settings==2.11.0",
+    "python-multipart==0.0.20",
+    "tabpfn==9.1.0",
+    "torch>=2.5",
+    "numpy",
+    "pandas",
+]
+
+[dependency-groups]
+dev = ["pytest==8.4.2", "pytest-asyncio==1.2.0", "pyright==1.1.406"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[project.scripts]
+papertrials = "papertrials.main:run"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: loads the real TabPFN model (needs weights downloaded)"]
+addopts = "-m 'not slow'"
+pythonpath = ["."]
+asyncio_mode = "auto"

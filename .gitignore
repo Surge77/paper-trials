@@ -1,0 +1,25 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+
+# Your local notebook
+*.db
+*.db-journal
+
+# Frontend
+node_modules/
+dist/
+
+# Local settings
+.env
+.env.*
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.stackdump
