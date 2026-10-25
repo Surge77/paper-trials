@@ -1,3 +1,4 @@
+import asyncio
 import json
 
 import pytest
@@ -8,6 +9,11 @@ from papertrials import gemma
 def test_keyword_fallback_finds_common_problems() -> None:
     issues = gemma.issues_from_keywords("Climbed then stalled, and it veered left at the end")
     assert issues == ["stall", "veer_left"]
+
+
+@pytest.mark.parametrize(("note", "issue"), [("drifted left a bit", "veer_left"), ("drifted right at the end", "veer_right")])
+def test_keyword_fallback_treats_drifting_as_veering(note: str, issue: str) -> None:
+    assert gemma.issues_from_keywords(note) == [issue]
 
 
 def test_keyword_fallback_returns_nothing_for_a_clean_flight() -> None:
@@ -74,6 +80,42 @@ async def test_lab_note_contradicting_the_prediction_check_is_rejected(monkeypat
     assert (await gemma.write_lab_note(FACTS))[1] == "template"
 
 
+@pytest.mark.parametrize("reply", [
+    "The median distance decreased from 12.8 m to 14.2 m.",
+    "Distance dropped to 14.2 m after the change.",
+])
+async def test_lab_note_getting_the_direction_wrong_is_rejected(monkeypatch: pytest.MonkeyPatch, reply: str) -> None:
+    async def fake_chat(prompt: str, schema: object = None, image: object = None) -> str:
+        return reply
+
+    monkeypatch.setattr(gemma, "_chat", fake_chat)
+    assert (await gemma.write_lab_note(FACTS))[1] == "template"
+
+
+@pytest.mark.parametrize("reply", [
+    "Median rose to 14.2 m. A stall caused the shorter flights.",
+    "Median rose to 14.2 m because of the wider wings.",
+    "Nothing changed, resulting in a veer left.",
+    "The notes mention a stall and veer left, resulting in a median distance of 14.2 m.",
+])
+async def test_lab_note_guessing_at_causes_is_rejected(monkeypatch: pytest.MonkeyPatch, reply: str) -> None:
+    async def fake_chat(prompt: str, schema: object = None, image: object = None) -> str:
+        return reply
+
+    monkeypatch.setattr(gemma, "_chat", fake_chat)
+    facts = {**FACTS, "issues": ["stall", "veer left"]}
+    assert (await gemma.write_lab_note(facts))[1] == "template"
+
+
+async def test_lab_note_saying_a_drop_is_an_increase_is_rejected(monkeypatch: pytest.MonkeyPatch) -> None:
+    async def fake_chat(prompt: str, schema: object = None, image: object = None) -> str:
+        return "The median distance increased from 14.2 m to 12.8 m."
+
+    monkeypatch.setattr(gemma, "_chat", fake_chat)
+    facts = {**FACTS, "median_m": 12.8, "parent_median_m": 14.2}
+    assert (await gemma.write_lab_note(facts))[1] == "template"
+
+
 async def test_echoed_fact_lines_are_stripped(monkeypatch: pytest.MonkeyPatch) -> None:
     async def fake_chat(prompt: str, schema: object = None, image: object = None) -> str:
         return "Experiment number: 5\nMedian distance: 14.2 m\nMedian rose from 12.8 m to 14.2 m."
@@ -99,3 +141,13 @@ async def test_photo_check_is_marked_as_an_estimate_and_clamped(monkeypatch: pyt
     assert result["estimate"] is True
     assert result["confidence"] == 1.0
     assert result["symmetry"] == "uneven"
+
+
+async def test_slow_gemma_note_falls_back_to_keywords(monkeypatch: pytest.MonkeyPatch) -> None:
+    async def slow_chat(prompt: str, schema: object = None, image: object = None) -> str:
+        await asyncio.sleep(1)
+        return json.dumps({"issues": []})
+
+    monkeypatch.setattr(gemma, "_chat", slow_chat)
+    monkeypatch.setattr(gemma, "NOTE_TIMEOUT_S", 0.05)
+    assert await gemma.parse_note("it stalled") == (["stall"], "keywords")

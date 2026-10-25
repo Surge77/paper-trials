@@ -28,3 +28,7 @@ def test_format_uses_choice_labels_and_units() -> None:
     assert FIELDS_BY_NAME["elevator_bend"].format(2) == "strong"
     assert FIELDS_BY_NAME["wing_span_cm"].format(18.5) == "18.5 cm"
     assert FIELDS_BY_NAME["wing_span_cm"].format(None) == "not recorded"
+
+
+def test_degrees_sit_right_after_the_number() -> None:
+    assert FIELDS_BY_NAME["nose_angle_deg"].format(30) == "30°"

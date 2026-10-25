@@ -3,7 +3,9 @@ from typing import Any
 
 from pydantic import BaseModel, Field, model_validator
 
-from papertrials.fields import FIELDS_BY_NAME
+from papertrials.fields import DESIGN_FIELDS, FIELDS_BY_NAME
+
+DESIGN_FIELD_NAMES = frozenset(f.name for f in DESIGN_FIELDS)
 from papertrials.models import DesignBase
 
 MAX_DISTANCE_M = 100.0
@@ -35,8 +37,8 @@ class ExperimentCreate(DesignIn):
 
     @model_validator(mode="after")
     def check_changed_field(self) -> "ExperimentCreate":
-        if self.changed_field is not None and self.changed_field not in FIELDS_BY_NAME:
-            raise ValueError(f"unknown field {self.changed_field}")
+        if self.changed_field is not None and self.changed_field not in DESIGN_FIELD_NAMES:
+            raise ValueError(f"{self.changed_field} is not a design or launch setting")
         if self.changed_field is not None and self.parent_id is None:
             raise ValueError("changed_field needs a parent_id")
         return self

@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+/* Light and high-contrast on purpose: half the time this is read on a phone, outside, in sunlight. */
+@theme {
+  --font-sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --color-ink: #111827;
+  --color-muted: #6b7280;
+  --color-line: #e5e7eb;
+  --color-canvas: #f6f7f9;
+  --color-grass: #15803d;
+  --color-grass-soft: #dcfce7;
+  --color-band: #c7d2fe;
+  --color-band-ink: #3730a3;
+  --color-miss: #b45309;
+  --color-miss-soft: #fef3c7;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}

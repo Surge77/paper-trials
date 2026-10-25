@@ -12,6 +12,7 @@ Two models share one interface:
 
 import hashlib
 import logging
+import threading
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -105,8 +106,12 @@ class TabPFNPredictor:
 
     def __init__(self, data: TrainingSet) -> None:
         from tabpfn import TabPFNRegressor
+        from tabpfn.constants import ModelVersion
 
-        self._model = TabPFNRegressor(
+        # v2 weights download without an account. Newer versions need a browser
+        # licence login first, which a local app shouldn't spring on people.
+        self._model = TabPFNRegressor.create_default_for_version(
+            ModelVersion.V2,
             n_estimators=4,
             categorical_features_indices=list(CATEGORICAL_INDICES),
             random_state=0,
@@ -130,6 +135,8 @@ status = ModelStatus()
 _cache: dict[str, Predictor] = {}
 # Datasets TabPFN already failed on, so a missing licence doesn't retry on every request.
 _failed: set[str] = set()
+# Requests run in a thread pool; without this two of them can load TabPFN at once on first use.
+_lock = threading.Lock()
 
 
 def _signature(data: TrainingSet, kind: str) -> str:
@@ -146,19 +153,25 @@ def get_predictor(data: TrainingSet) -> Predictor | None:
     if data.n_rows == 0:
         return None
     if has_enough_for_tabpfn(data) and get_settings().use_tabpfn:
-        key = _signature(data, "tabpfn")
-        if key in _cache:
-            return _cache[key]
-        if key not in _failed:
-            try:
-                model = TabPFNPredictor(data)
-            except Exception as exc:  # weights missing, license not accepted, out of memory...
-                log.warning("TabPFN unavailable, using baseline: %s", exc)
-                status.tabpfn_error = str(exc).strip().splitlines()[0][:300]
-                _failed.add(key)
-            else:
-                _cache.clear()
-                _cache[key] = model
-                status.tabpfn_error = None
-                return model
+        with _lock:
+            return _tabpfn_or_baseline(data)
     return BaselinePredictor(data)
+
+
+def _tabpfn_or_baseline(data: TrainingSet) -> Predictor:
+    key = _signature(data, "tabpfn")
+    if key in _cache:
+        return _cache[key]
+    if key in _failed:
+        return BaselinePredictor(data)
+    try:
+        model = TabPFNPredictor(data)
+    except Exception as exc:  # weights missing, license not accepted, out of memory...
+        log.warning("TabPFN unavailable, using baseline: %s", exc)
+        status.tabpfn_error = str(exc).strip().splitlines()[0][:300]
+        _failed.add(key)
+        return BaselinePredictor(data)
+    _cache.clear()
+    _cache[key] = model
+    status.tabpfn_error = None
+    return model

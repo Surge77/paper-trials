@@ -44,6 +44,8 @@ class Field:
         if self.choice_labels and value in self.choices:
             return self.choice_labels[self.choices.index(value)]
         number = f"{value:g}"
+        if self.unit == "°":
+            return f"{number}°"
         return f"{number} {self.unit}".strip()
 
 
